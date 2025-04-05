@@ -20,13 +20,13 @@ bool char_cmp(char a, char b) {
 
 int main() {
     Queue_int* nums = queue_int_create();
-    queue_int_enqueue(nums, 10);
-    queue_int_enqueue(nums, 20);
+    queue_int_enqueue(nums, 10, nums->length);
+    queue_int_enqueue(nums, 20, nums->length);
 
     printf("Cola: ");
     queue_int_print(nums, print_int); // Usar función concreta para evitar errores
 
-    queue_int_dequeue(nums);
+    queue_int_dequeue(nums, 0);
     printf("Cola: ");
     queue_int_print(nums, print_int);
 
@@ -36,7 +36,7 @@ int main() {
         printf("Cola no esta vacia\n");
     }
 
-    queue_int_dequeue(nums);
+    queue_int_dequeue(nums, 0);
 
     printf("Cola: ");
     queue_int_print(nums, print_int);
@@ -50,18 +50,18 @@ int main() {
     queue_int_clear(nums);
     
     Queue_char *chars = queue_char_create();
-    queue_char_enqueue(chars, 'a');
-    queue_char_enqueue(chars, 'b');
-    queue_char_enqueue(chars, 'c');
-    queue_char_enqueue(chars, 'd');
-    queue_char_enqueue(chars, 'e');
+    queue_char_enqueue(chars, 'd', chars->length);
+    queue_char_enqueue(chars, 'e', chars->length);
+    queue_char_enqueue(chars, 'c', 0);
+    queue_char_enqueue(chars, 'b', 0);
+    queue_char_enqueue(chars, 'a', 0);
 
     printf("Cola: ");
     queue_char_print(chars, print_char);
 
-    queue_char_dequeue(chars);
-    queue_char_dequeue(chars);
-    queue_char_dequeue(chars);
+    queue_char_dequeue(chars, 0);
+    queue_char_dequeue(chars, 0);
+    queue_char_dequeue(chars, 0);
 
     printf("Cola: ");
     queue_char_print(chars, print_char);
@@ -72,8 +72,8 @@ int main() {
         printf("Cola no esta vacia\n");
     }
 
-    queue_char_dequeue(chars);
-    queue_char_dequeue(chars);
+    queue_char_dequeue(chars, chars->length);
+    queue_char_dequeue(chars, chars->length);
 
     printf("Cola: ");
     queue_char_print(chars, print_char);

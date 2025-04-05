@@ -22,8 +22,8 @@
     } Queue_##TYPE; \
     \
     Queue_##TYPE* queue_##TYPE##_create(void); \
-    bool queue_##TYPE##_enqueue(Queue_##TYPE* queue, TYPE data); \
-    bool queue_##TYPE##_dequeue(Queue_##TYPE* queue); \
+    bool queue_##TYPE##_enqueue(Queue_##TYPE* queue, TYPE data, int pos); \
+    bool queue_##TYPE##_dequeue(Queue_##TYPE* queue, int pos); \
     bool queue_##TYPE##_get(const Queue_##TYPE* queue, TYPE* out); \
     size_t queue_##TYPE##_length(const Queue_##TYPE* queue); \
     void queue_##TYPE##_clear(Queue_##TYPE* queue); \
@@ -67,8 +67,9 @@
         free(queue); \
     } \
     \
-    bool queue_##TYPE##_enqueue(Queue_##TYPE* queue, TYPE data) { \
+    bool queue_##TYPE##_enqueue(Queue_##TYPE* queue, TYPE data, int pos) { \
         if (!queue) return false; \
+        if(pos != 0 && pos != queue->length) return false; \
         \
         Node_##TYPE* new_node = node_##TYPE##_create(data); \
         if (!new_node) return false; \
@@ -78,22 +79,37 @@
         if(queue->length == 0){ \
             queue->head = new_node; \
             queue->tail = new_node; \
-        }else{ \
-        queue->tail->next = new_node; \
-        queue->tail = new_node; \
+        }else if(pos == queue->length){ \
+            queue->tail->next = new_node; \
+            queue->tail = new_node; \
+        }else if(pos == 0){ \
+            new_node->next = queue->head;\
+            queue->head = new_node; \
         } \
         queue->length++; \
         return true; \
     } \
     \
-    bool queue_##TYPE##_dequeue(Queue_##TYPE* queue) { \
+    bool queue_##TYPE##_dequeue(Queue_##TYPE* queue, int pos) { \
         if (!queue || !queue->head) return false; \
+        \
+        if(pos != 0 && pos != queue->length) return false; \
         \
         Node_##TYPE* to_delete = queue->head; \
         \
+        if(pos == 0){ \
         queue->head = queue->head->next; \
         if (!queue->head) queue->tail = NULL; \
         \
+        } else if(pos == queue->length){ \
+            Node_##TYPE* to_delete_prev = queue->head; \
+            for(int i = 0; i < queue->length-2; i++){ \
+                to_delete_prev = to_delete_prev->next; \
+            } \
+            to_delete = queue->tail; \
+            queue->tail = to_delete_prev; \
+            queue->tail->next = NULL; \
+        } \
         to_delete->next = NULL; \
         free(to_delete); \
         queue->length--; \
