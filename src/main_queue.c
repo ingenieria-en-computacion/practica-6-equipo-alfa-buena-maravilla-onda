@@ -37,6 +37,10 @@ int main() {
     }
 
     queue_int_dequeue(nums);
+
+    printf("Cola: ");
+    queue_int_print(nums, print_int);
+
     if(queue_int_is_empty(nums)){
         printf("Cola vacia\n");
     }else{
@@ -71,6 +75,8 @@ int main() {
     queue_char_dequeue(chars);
     queue_char_dequeue(chars);
 
+    printf("Cola: ");
+    queue_char_print(chars, print_char);
 
     if(queue_int_is_empty(nums)){
         printf("Cola vacia\n");
